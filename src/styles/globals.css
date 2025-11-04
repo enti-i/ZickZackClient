@@ -25,19 +25,19 @@
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 12%;
     --popover-foreground: 0 0% 98%;
-    --primary: 210 78% 35%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217 10% 25%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 10% 25%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 10% 25%;
-    --accent-foreground: 210 40% 98%;
+    --primary: 146 100% 45%;
+    --primary-foreground: 144 100% 8%;
+    --secondary: 150 35% 18%;
+    --secondary-foreground: 144 100% 85%;
+    --muted: 150 25% 15%;
+    --muted-foreground: 148 45% 65%;
+    --accent: 146 100% 45%;
+    --accent-foreground: 144 100% 10%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
     --border: 217 19% 27%;
     --input: 217 19% 27%;
-    --ring: 210 78% 35%;
+    --ring: 146 100% 45%;
     --text-primary: #ffffff;
     --text-secondary: #ababab;
     --text-muted: #808080;
@@ -62,10 +62,12 @@
     --spacing-2xl: 3rem;
 
     /* Default accent color */
-    --accent: #4f8eff;
-    --accent-hover: #3a7aff;
-    --accent-shadow: rgba(79, 142, 255, 0.5);
-    --accent-rgb: 79, 142, 255;
+    --accent: #00ff66;
+    --accent-hover: #00cc52;
+    --accent-shadow: rgba(0, 255, 102, 0.5);
+    --accent-light: #33ff85;
+    --accent-dark: #009944;
+    --accent-rgb: 0, 255, 102;
 }
 
 @keyframes fadeIn {

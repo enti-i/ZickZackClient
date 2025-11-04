@@ -24,6 +24,7 @@ export interface LauncherConfig {
   concurrent_io_limit: number; // usize
   hooks: Hooks;
   hide_on_process_start: boolean;
+  fps_booster_enabled: boolean;
   global_memory_settings: MemorySettings;
   custom_game_directory: string | null; // Option<PathBuf>
 } 

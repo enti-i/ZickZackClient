@@ -4,8 +4,8 @@
     --scrollbar-minsize: 40px;
     --scrollbar-ff-width: thin;
     --scrollbar-track-color: rgba(0, 0, 0, 0.2);
-    --scrollbar-thumb-color: var(--accent, #4f8eff);
-    --scrollbar-thumb-hover-color: var(--accent-hover, #3a7aff);
+    --scrollbar-thumb-color: var(--accent, #00ff66);
+    --scrollbar-thumb-hover-color: var(--accent-hover, #00cc52);
 }
 
 * {

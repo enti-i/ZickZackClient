@@ -23,7 +23,12 @@ interface FullscreenEffectRendererProps {
 }
 
 export function FullscreenEffectRenderer({ effectId, onClose }: FullscreenEffectRendererProps) {
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const { accentColor: themeAccentColor } = useThemeStore();
   // isBackgroundAnimationEnabled is not directly used here as we are forcing preview
 
@@ -42,14 +47,26 @@ export function FullscreenEffectRenderer({ effectId, onClose }: FullscreenEffect
   }, [onClose]);
 
   const getQualityParams = () => {
-    switch (qualityLevel) {
-      case "low":
-        return { particleCount: 30, opacity: 0.2, speed: 0.5 };
-      case "high":
-        return { particleCount: 200, opacity: 0.4, speed: 1.5 };
-      default: // medium
-        return { particleCount: 50, opacity: 0.3, speed: 1 };
+    const baseParams = (() => {
+      switch (qualityLevel) {
+        case "low":
+          return { particleCount: 30, opacity: 0.2, speed: 0.5 };
+        case "high":
+          return { particleCount: 200, opacity: 0.4, speed: 1.5 };
+        default:
+          return { particleCount: 50, opacity: 0.3, speed: 1 };
+      }
+    })();
+
+    if (!fpsBoosterEnabled) {
+      return baseParams;
     }
+
+    return {
+      particleCount: Math.max(15, Math.floor(baseParams.particleCount * 0.55)),
+      opacity: baseParams.opacity * 0.7,
+      speed: baseParams.speed * 0.75,
+    };
   };
 
   const qualityParams = getQualityParams();

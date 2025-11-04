@@ -14,6 +14,14 @@ export type AccentColor = {
 };
 
 export const ACCENT_COLORS: Record<string, AccentColor> = {
+  neonGreen: {
+    name: "Neon Green",
+    value: "#00ff66",
+    hoverValue: "#00cc52",
+    shadowValue: "rgba(0, 255, 102, 0.5)",
+    light: "#33ff85",
+    dark: "#009944",
+  },
   cyan: {
     name: "Cyan",
     value: "#00B9E8",
@@ -253,7 +261,7 @@ interface ThemeState {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
-      accentColor: ACCENT_COLORS.blue,
+      accentColor: ACCENT_COLORS.neonGreen,
       isBackgroundAnimationEnabled: false,
       isDetailViewSidebarOnLeft: true,
       profileGroupingCriterion: "group",

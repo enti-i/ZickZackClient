@@ -22,10 +22,17 @@ export function NebulaLightning({
   className = "",
 }: NebulaLightningProps) {
   const accentColor = useThemeStore((state) => state.accentColor);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
 
-  const qualityMultiplier =
+  const baseMultiplier =
     qualityLevel === "low" ? 0.5 : qualityLevel === "high" ? 1.5 : 1;
+  const boosterMultiplier = fpsBoosterEnabled ? 0.7 : 1;
+  const qualityMultiplier = baseMultiplier * boosterMultiplier;
   const adjustedSpeed = speed * qualityMultiplier;
   const adjustedIntensity = intensity * qualityMultiplier;
 
