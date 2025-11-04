@@ -98,8 +98,8 @@ export function PlayerActionsDisplay({
   const skinViewerMaxDisplayWidth = 225;
 
   const skinViewerStyles: React.CSSProperties = {
-    filter: 'drop-shadow(5px 10px 5px rgba(0,0,0,0.75))',
-    WebkitBoxReflect: 'below 0px linear-gradient(to bottom, transparent, rgba(0,0,0,0.05))',
+    filter: 'drop-shadow(5px 10px 5px rgba(0, 38, 22, 0.75))',
+    WebkitBoxReflect: 'below 0px linear-gradient(to bottom, transparent, rgba(0, 38, 22, 0.05))',
     height: `${skinViewerDisplayHeight}px`,
     width: 'auto',
     maxWidth: `${skinViewerMaxDisplayWidth}px`,
@@ -125,7 +125,7 @@ export function PlayerActionsDisplay({
       {displayMode === 'logo' ? (
         <img
           src="norisk_logo_color.png"
-          alt="NoRisk Logo"
+          alt="ZickZack Logo"
           className="h-48 sm:h-56 md:h-64 mb-[-80px] sm:mb-[-100px] md:mb-[-120px] relative z-0"
           style={{
             imageRendering: "pixelated",

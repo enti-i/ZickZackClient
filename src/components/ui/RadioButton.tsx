@@ -164,7 +164,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
           boxShadow:
             variant === "ghost" || shadowDepth === "none"
               ? "none"
-              : `0 6px 0 rgba(0,0,0,0.25), 0 8px 12px rgba(0,0,0,0.4)`,
+              : `0 6px 0 rgba(0, 38, 22, 0.25), 0 8px 12px rgba(0, 38, 22, 0.4)`,
           duration: 0.2,
           ease: "power2.out",
         });
@@ -180,7 +180,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
           boxShadow:
             variant === "ghost" || shadowDepth === "none"
               ? "none"
-              : `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35)`,
+              : `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35)`,
           duration: 0.2,
           ease: "power2.out",
         });
@@ -218,7 +218,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     const initialBoxShadow =
       variant === "ghost" || shadowDepth === "none"
         ? "none"
-        : `0 ${initialPart1Y} 0 rgba(0,0,0,0.3), 0 ${initialPart2Y} ${initialPart2Blur} rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+        : `0 ${initialPart1Y} 0 rgba(0, 38, 22, 0.3), 0 ${initialPart2Y} ${initialPart2Blur} rgba(0, 38, 22, 0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
 
     return (
       <fieldset role="radiogroup">
@@ -231,7 +231,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             "flex items-center gap-3 cursor-pointer",
             "text-shadow-sm",
             variant !== "ghost" && shadowDepth !== "none" && "border-2 border-b-4",
-            "focus-within:outline-none focus-within:ring-2 focus-within:ring-white/30 focus-within:ring-offset-1 focus-within:ring-offset-black/20",
+            "focus-within:outline-none focus-within:ring-2 focus-within:ring-white/30 focus-within:ring-offset-1 focus-within:ring-offset-[rgba(0,38,22,0.3)]",
             disabled && "opacity-50 cursor-not-allowed hover:translate-y-0",
             sizeClasses,
             className,
@@ -300,13 +300,13 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
                 getRadioSizes(),
               )}
               style={{
-                backgroundColor: isChecked ? colors.main : "rgba(0,0,0,0.2)",
+                backgroundColor: isChecked ? colors.main : "rgba(0, 38, 22, 0.2)",
                 borderWidth: "2px",
                 borderStyle: "solid",
                 borderColor: isChecked ? colors.light : "rgba(255,255,255,0.3)",
                 boxShadow: isChecked
                   ? `0 0 8px ${colors.main}80, inset 0 0 4px ${colors.light}`
-                  : "inset 0 1px 2px rgba(0,0,0,0.3)",
+                  : "inset 0 1px 2px rgba(0, 38, 22, 0.3)",
               }}
             >
               {isChecked && (

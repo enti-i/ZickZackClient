@@ -98,7 +98,7 @@ export const TagBadge = forwardRef<HTMLElement, TagBadgeProps>(
           main: accentColor.value,
           light: accentColor.value,
           dark: accentColor.value,
-          text: "#ffffff",
+          text: "#dfffe9",
         };
       }
       return getVariantColors(variant as ComponentVariant, accentColor);
@@ -145,7 +145,7 @@ export const TagBadge = forwardRef<HTMLElement, TagBadgeProps>(
             borderWidth: "1px",
             borderStyle: "solid",
             borderColor: "#dc262680",
-            color: "#ffffff",
+            color: "#dfffe9",
           }
         : {};    const { 
       onCopy, 
@@ -162,7 +162,7 @@ export const TagBadge = forwardRef<HTMLElement, TagBadgeProps>(
       className: cn(
         "inline-flex items-center justify-center relative overflow-hidden",        "w-fit font-minecraft transition-all duration-200",
         sizeClasses,
-        isClickable ? "cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-1 focus:ring-offset-black/20" : "",
+        isClickable ? "cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-1 focus:ring-offset-[rgba(0,38,22,0.3)]" : "",
         disabled ? "opacity-50 cursor-not-allowed" : "",
         className,
       ),

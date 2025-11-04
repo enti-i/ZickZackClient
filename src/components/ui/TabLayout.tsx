@@ -47,7 +47,7 @@ export function TabLayout({
   const headerStyle = {
     backgroundColor: `${colors.main}15`,
     borderColor: `${colors.main}60`,
-    boxShadow: `0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)`,
+    boxShadow: `0 4px 6px -1px rgba(0, 45, 25, 0.35), 0 2px 4px -1px rgba(0, 30, 18, 0.25)`,
     borderRadius: "0px",
   };
 

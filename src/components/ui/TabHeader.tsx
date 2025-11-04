@@ -74,7 +74,7 @@ export function TabHeader({
         )}
         <h1
           className="text-xl font-minecraft font-bold"
-          style={{ color: "#ffffff" }}
+          style={{ color: "#dfffe9" }}
         >
           {title}
         </h1>

@@ -22,7 +22,12 @@ export function Lightning({
   className = "",
 }: LightningProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const isWindowFocused = useWindowFocus();
   const { isBackgroundAnimationEnabled } = useThemeStore();
   const animationFrameRef = useRef<number>();
@@ -35,8 +40,10 @@ export function Lightning({
     if (!canvas) return;
 
     // Adjust based on quality level
-    const qualityMultiplier =
+    const baseMultiplier =
       qualityLevel === "low" ? 0.5 : qualityLevel === "high" ? 1.5 : 1;
+    const boosterMultiplier = fpsBoosterEnabled ? 0.75 : 1;
+    const qualityMultiplier = baseMultiplier * boosterMultiplier;
     const adjustedSpeed = speed * qualityMultiplier;
     const adjustedIntensity = intensity * qualityMultiplier;
     const octaveCount =

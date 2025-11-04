@@ -135,7 +135,7 @@ export const LoadingState = forwardRef<HTMLDivElement, LoadingStateProps>(
             main: accentColor.value,
             light: accentColor.hoverValue || accentColor.value,
             dark: accentColor.value,
-            text: "#ffffff",
+            text: "#dfffe9",
           };
       }
     };
@@ -172,10 +172,10 @@ export const LoadingState = forwardRef<HTMLDivElement, LoadingStateProps>(
       if (shadowDepth === "none") return "none";
 
       if (shadowDepth === "short") {
-        return `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+        return `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
       }
 
-      return `0 8px 0 rgba(0,0,0,0.3), 0 10px 15px rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+      return `0 8px 0 rgba(0, 38, 22, 0.3), 0 10px 15px rgba(0, 38, 22, 0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
     };
 
     if (!isVisible) return null;
@@ -221,7 +221,7 @@ export const LoadingState = forwardRef<HTMLDivElement, LoadingStateProps>(
               "w-full overflow-hidden rounded-full bg-black/20",
               sizeStyles.progressHeight,
             )}
-            style={{ boxShadow: "inset 0 1px 2px rgba(0,0,0,0.3)" }}
+            style={{ boxShadow: "inset 0 1px 2px rgba(0, 38, 22, 0.3)" }}
           >
             <div
               ref={progressRef}

@@ -92,21 +92,21 @@ export const Label = forwardRef<HTMLDivElement, LabelProps>(
             main: "transparent",
             light: "transparent",
             dark: "transparent",
-            text: "#ffffff",
+            text: "#dfffe9",
           };
         case "flat":
           return {
             main: accentColor.value,
             light: accentColor.hoverValue || accentColor.value,
             dark: accentColor.value,
-            text: "#ffffff",
+            text: "#dfffe9",
           };
         default:
           return {
             main: accentColor.value,
             light: accentColor.hoverValue || accentColor.value,
             dark: accentColor.value,
-            text: "#ffffff",
+            text: "#dfffe9",
           };
       }
     };

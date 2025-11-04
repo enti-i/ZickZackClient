@@ -150,7 +150,7 @@ export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(
             main: accentColor.value,
             light: accentColor.hoverValue || accentColor.value,
             dark: accentColor.value,
-            text: "#ffffff",
+            text: "#dfffe9",
           };
       }
     };
@@ -194,10 +194,10 @@ export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(
       if (shadowDepth === "none") return "none";
 
       if (shadowDepth === "short") {
-        return `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+        return `0 4px 0 rgba(0, 30, 18, 0.45), 0 6px 10px rgba(0, 45, 25, 0.45), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
       }
 
-      return `0 8px 0 rgba(0,0,0,0.3), 0 10px 15px rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+      return `0 8px 0 rgba(0, 28, 16, 0.45), 0 10px 15px rgba(0, 45, 25, 0.55), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
     };
 
     if (!isVisible) return null;
@@ -209,7 +209,7 @@ export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(
           "absolute inset-0 z-10 flex items-center justify-center backdrop-blur-sm transition-opacity",
           className,
         )}
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        style={{ backgroundColor: "rgba(0, 42, 24, 0.7)" }}
         {...props}
       >
         <div
@@ -251,7 +251,7 @@ export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(
                   "w-full overflow-hidden rounded-full bg-black/20",
                   sizeStyles.progressHeight,
                 )}
-                style={{ boxShadow: "inset 0 1px 2px rgba(0,0,0,0.3)" }}
+                style={{ boxShadow: "inset 0 1px 2px rgba(0, 30, 18, 0.35)" }}
               >
                 <div
                   ref={progressRef}

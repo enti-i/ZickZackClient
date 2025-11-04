@@ -108,7 +108,7 @@ export function Modal({
 
   const getBoxShadow = () => {
     if (variant === "3d") {
-      return `0 10px 0 rgba(0,0,0,0.3), 0 15px 25px rgba(0,0,0,0.5), inset 0 1px 0 ${accentColor.value}40, inset 0 0 0 1px ${accentColor.value}20`;
+      return `0 10px 0 rgba(0, 38, 22, 0.3), 0 15px 25px rgba(0, 38, 22, 0.5), inset 0 1px 0 ${accentColor.value}40, inset 0 0 0 1px ${accentColor.value}20`;
     }
     return "none";
   };

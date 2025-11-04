@@ -686,7 +686,7 @@ export function CapeList({
             borderBottomColor: accentColor.value,
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
-            boxShadow: "0 8px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05)",
+            boxShadow: "0 8px 16px rgba(0, 38, 22, 0.3), 0 0 0 1px rgba(255,255,255,0.05)",
           }}
           onClick={e => e.stopPropagation()}
         >

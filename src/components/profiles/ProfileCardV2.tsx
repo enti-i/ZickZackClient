@@ -289,7 +289,7 @@ export function ProfileCardV2({
     const part1Y = shadowDepth === "short" ? "4px" : "8px";
     const part2Y = shadowDepth === "short" ? "6px" : "10px";
     const part2Blur = shadowDepth === "short" ? "10px" : "15px";
-    const boxShadow = `0 ${part1Y} 0 rgba(0,0,0,0.3), 0 ${part2Y} ${part2Blur} rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+    const boxShadow = `0 ${part1Y} 0 rgba(0, 38, 22, 0.3), 0 ${part2Y} ${part2Blur} rgba(0, 38, 22, 0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
 
     return {
       backgroundColor,
@@ -319,8 +319,8 @@ export function ProfileCardV2({
     const borderBottomColor = isHovered ? colors.light : colors.dark;
 
     const boxShadow = isHovered
-      ? `0 2px 0 rgba(0,0,0,0.4), 0 4px 8px rgba(0,0,0,0.3), inset 0 1px 0 ${colors.light}50, inset 0 0 0 1px ${colors.main}30`
-      : `0 2px 0 rgba(0,0,0,0.3), 0 3px 6px rgba(0,0,0,0.25), inset 0 1px 0 ${colors.light}30, inset 0 0 0 1px ${colors.main}20`;
+      ? `0 2px 0 rgba(0, 38, 22, 0.4), 0 4px 8px rgba(0, 38, 22, 0.3), inset 0 1px 0 ${colors.light}50, inset 0 0 0 1px ${colors.main}30`
+      : `0 2px 0 rgba(0, 38, 22, 0.3), 0 3px 6px rgba(0, 38, 22, 0.25), inset 0 1px 0 ${colors.light}30, inset 0 0 0 1px ${colors.main}20`;
 
     return {
       backgroundColor,
@@ -329,7 +329,7 @@ export function ProfileCardV2({
       borderColor,
       borderBottomColor,
       boxShadow,
-      color: "#ffffff",
+      color: "#dfffe9",
       transform: isHovered ? "scale(1.05)" : "scale(1)",
       filter: isHovered ? "brightness(1.1)" : "brightness(1)",
       transition: "all 0.2s ease",
@@ -589,7 +589,7 @@ export function ProfileCardV2({
           <div className={`flex-grow min-w-0 mr-auto pr-2 ${isCompact ? 'max-w-[calc(100%-64px)]' : 'max-w-[calc(100%-80px)]'}`}>
             <h3
               className={`font-minecraft-ten text-white ${isCompact ? 'text-base' : 'text-lg'} whitespace-nowrap overflow-hidden text-ellipsis max-w-full normal-case`}
-              style={{ textShadow: '0 2px 4px rgba(0,0,0,0.7)' }}
+              style={{ textShadow: '0 2px 4px rgba(0, 38, 22, 0.7)' }}
               title={profile.name}
             >
               {profile.name}
@@ -597,14 +597,14 @@ export function ProfileCardV2({
             {isLaunching ? (
               <div
                 className="text-white/60 text-xs font-minecraft-ten opacity-70 whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
-                style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                style={{ textShadow: '0 1px 2px rgba(0, 38, 22, 0.5)' }}
               >
                 {statusMessage || "Starting..."}
               </div>
             ) : (
               isCompact ? (
                  // Compact mode: Only MC version + last played
-                 <div className="flex items-center gap-1.5 text-xs font-minecraft-ten" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+                 <div className="flex items-center gap-1.5 text-xs font-minecraft-ten" style={{ textShadow: '0 1px 2px rgba(0, 38, 22, 0.5)' }}>
                    {/* Minecraft Version */}
                    <div className="text-white/70 flex items-center gap-0.5">
                      <img
@@ -624,7 +624,7 @@ export function ProfileCardV2({
                  </div>
                ) : (
                  // Grid mode: Full info display
-                 <div className="flex items-center gap-2 text-xs font-minecraft-ten" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+                 <div className="flex items-center gap-2 text-xs font-minecraft-ten" style={{ textShadow: '0 1px 2px rgba(0, 38, 22, 0.5)' }}>
                    {/* Minecraft Version */}
                    <div className="text-white/70 flex items-center gap-1">
                      <img
@@ -744,7 +744,7 @@ export function ProfileCardV2({
       <div className="flex-1 min-w-0">
         <h3
           className="text-white font-minecraft-ten text-sm whitespace-nowrap overflow-hidden text-ellipsis normal-case mb-1"
-          style={{ textShadow: '0 2px 4px rgba(0,0,0,0.7)' }}
+          style={{ textShadow: '0 2px 4px rgba(0, 38, 22, 0.7)' }}
           title={profile.name}
         >
           {profile.name}
@@ -753,12 +753,12 @@ export function ProfileCardV2({
         {isLaunching ? (
           <div
             className="text-white/60 text-xs font-minecraft-ten opacity-70 whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
-            style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+            style={{ textShadow: '0 1px 2px rgba(0, 38, 22, 0.5)' }}
           >
             {statusMessage || "Starting..."}
           </div>
         ) : (
-          <div className="flex items-center gap-2 text-xs font-minecraft-ten" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+          <div className="flex items-center gap-2 text-xs font-minecraft-ten" style={{ textShadow: '0 1px 2px rgba(0, 38, 22, 0.5)' }}>
           {/* Minecraft Version */}
           <div className="text-white/70 flex items-center gap-1">
             <img

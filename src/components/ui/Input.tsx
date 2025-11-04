@@ -160,7 +160,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 : accentColor.value,
             boxShadow:
               variant === "3d"
-                ? `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35)`
+                ? `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35)`
                 : "none",
             filter:
               (isFocused || isHovered) && !props.disabled

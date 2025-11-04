@@ -658,7 +658,7 @@ function NoRiskModRow({
               backgroundColor: `${accentColor.value}15`,
               borderColor: `${accentColor.value}30`,
               borderBottomColor: `${accentColor.value}50`,
-              boxShadow: `0 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 ${accentColor.value}20`,
+              boxShadow: `0 2px 4px rgba(0, 38, 22, 0.2), inset 0 1px 0 ${accentColor.value}20`,
             }}
           >
             {localIcon ? (

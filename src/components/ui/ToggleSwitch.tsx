@@ -75,10 +75,10 @@ export function ToggleSwitch({
     if (knobRef.current) {
       gsap.to(knobRef.current, {
         x: checked ? (size === "sm" ? 16 : size === "lg" ? 28 : 20) : 0,
-        backgroundColor: checked ? "#ffffff" : "#f0f0f0",
+        backgroundColor: checked ? "#dfffe9" : "#123d28",
         boxShadow: checked
-          ? `0 1px 3px rgba(0,0,0,0.3), 0 0 0 2px ${accentColor.value}40`
-          : "0 1px 3px rgba(0,0,0,0.3)",
+          ? `0 1px 3px rgba(0, 38, 22, 0.3), 0 0 0 2px ${accentColor.value}40`
+          : "0 1px 3px rgba(0, 38, 22, 0.3)",
         duration: 0.3,
         ease: "power2.inOut",
       });
@@ -185,8 +185,8 @@ export function ToggleSwitch({
             )}
             style={{
               boxShadow: checked
-                ? `0 1px 3px rgba(0,0,0,0.3), 0 0 0 2px ${accentColor.value}40`
-                : "0 1px 3px rgba(0,0,0,0.3)",
+                ? `0 1px 3px rgba(0, 38, 22, 0.3), 0 0 0 2px ${accentColor.value}40`
+                : "0 1px 3px rgba(0, 38, 22, 0.3)",
               transform: `translate(${checked ? (size === "sm" ? 16 : size === "lg" ? 28 : 20) : 0}px, -50%) scale(${isHovered ? 1.15 : 1})`,
             }}
           />

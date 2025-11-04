@@ -22,7 +22,12 @@ export function MatrixRainEffect({
   const accentColor = useThemeStore((state) => state.accentColor);
   const staticBackground = useThemeStore((state) => state.staticBackground);
   const isBackgroundAnimationEnabled = useThemeStore((state) => state.isBackgroundAnimationEnabled);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const [isVisible, setIsVisible] = useState(true);
   const isWindowFocused = useWindowFocus();
   const isAnimating = forceEnable || !staticBackground;
@@ -61,11 +66,16 @@ export function MatrixRainEffect({
     const charactersArray = CHARACTERS.split("");
     const RAINDROP_SPAWN_RATE = 0.99;
 
-    const qualityMultiplier =
+    const baseMultiplier =
       qualityLevel === "low" ? 0.3 : qualityLevel === "high" ? 0.8 : 0.5;
+    const boosterMultiplier = fpsBoosterEnabled ? 0.7 : 1;
+    const qualityMultiplier = baseMultiplier * boosterMultiplier;
     const adjustedSpeed = speed * qualityMultiplier;
-    const targetFps =
+    const baseTargetFps =
       qualityLevel === "low" ? 20 : qualityLevel === "high" ? 30 : 24;
+    const targetFps = fpsBoosterEnabled
+      ? Math.max(16, Math.floor(baseTargetFps * 0.75))
+      : baseTargetFps;
     const frameInterval = 1000 / targetFps;
 
     let columns: number;

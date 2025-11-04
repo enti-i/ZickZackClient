@@ -23,6 +23,110 @@ use super::modloader::ModloaderFactory;
 use crate::minecraft::downloads::MinecraftLoggingDownloadService;
 use crate::utils::mc_utils;
 use tokio::fs as async_fs;
+use std::collections::HashMap;
+use std::io::ErrorKind;
+use std::path::Path;
+
+const FPS_BOOSTER_JVM_ARGS: &[&str] = &[
+    "-XX:+ParallelRefProcEnabled",
+    "-XX:+DisableExplicitGC",
+    "-XX:+UseStringDeduplication",
+    "-XX:+AlwaysPreTouch",
+    "-XX:G1MixedGCCountTarget=4",
+    "-XX:+PerfDisableSharedMem",
+    "-XX:MaxTenuringThreshold=1",
+    "-XX:G1MixedGCLiveThresholdPercent=85",
+    "-XX:G1HeapWastePercent=5",
+    "-XX:G1RSetUpdatingPauseTimePercent=5",
+];
+
+const FPS_BOOSTER_OPTION_OVERRIDES: &[(&str, &str)] = &[
+    ("graphicsMode", "fast"),
+    ("ao", "0"),
+    ("renderDistance", "8"),
+    ("simulationDistance", "8"),
+    ("entityDistanceScaling", "0.5"),
+    ("clouds", "fast"),
+    ("particles", "0"),
+    ("entityShadows", "false"),
+    ("mipmapLevels", "0"),
+    ("biomeBlendRadius", "0"),
+    ("fovEffectScale", "0.0"),
+    ("screenEffectScale", "0.0"),
+    ("bobView", "false"),
+    ("enableVsync", "false"),
+    ("maxFps", "260"),
+];
+
+async fn apply_fps_booster_option_overrides(game_directory: &Path) -> Result<()> {
+    let options_path = game_directory.join("options.txt");
+    let mut entries: Vec<(String, String)> = Vec::new();
+    let mut key_to_index: HashMap<String, usize> = HashMap::new();
+
+    let existing_contents = match async_fs::read_to_string(&options_path).await {
+        Ok(contents) => contents,
+        Err(err) if err.kind() == ErrorKind::NotFound => String::new(),
+        Err(err) => return Err(AppError::Io(err)),
+    };
+
+    if !existing_contents.is_empty() {
+        for line in existing_contents.lines() {
+            if let Some((raw_key, raw_value)) = line.split_once(':') {
+                let key = raw_key.trim().to_string();
+                let value = raw_value.trim().to_string();
+                key_to_index.insert(key.clone(), entries.len());
+                entries.push((key, value));
+            }
+        }
+    }
+
+    for (key, value) in FPS_BOOSTER_OPTION_OVERRIDES.iter() {
+        let key_owned = key.to_string();
+        let desired_value = value.to_string();
+
+        if let Some(idx) = key_to_index.get(&key_owned) {
+            let current_value = &entries[*idx].1;
+            if current_value != &desired_value {
+                info!(
+                    "[FPS Booster] Updating Minecraft option '{}' from '{}' to '{}'",
+                    key, current_value, desired_value
+                );
+                entries[*idx].1 = desired_value;
+            }
+        } else {
+            info!(
+                "[FPS Booster] Writing Minecraft option '{}' = '{}'",
+                key, desired_value
+            );
+            let index = entries.len();
+            key_to_index.insert(key_owned.clone(), index);
+            entries.push((key_owned, desired_value));
+        }
+    }
+
+    if entries.is_empty() {
+        for (key, value) in FPS_BOOSTER_OPTION_OVERRIDES.iter() {
+            entries.push((key.to_string(), value.to_string()));
+        }
+    }
+
+    let mut serialized = entries
+        .iter()
+        .map(|(key, value)| format!("{key}:{value}"))
+        .collect::<Vec<_>>()
+        .join("\n");
+
+    serialized.push('\n');
+
+    async_fs::write(&options_path, serialized).await?;
+    info!(
+        "[FPS Booster] Applied performance-friendly options to {:?}",
+        options_path
+    );
+
+    Ok(())
+}
+
 
 async fn emit_progress_event(
     state: &State,
@@ -80,6 +184,7 @@ pub async fn install_minecraft_version(
     let state = State::get().await?;
     let is_experimental_mode = state.config_manager.is_experimental_mode().await;
     let launcher_config = state.config_manager.get_config().await;
+    let fps_booster_enabled = launcher_config.fps_booster_enabled;
 
     info!(
         "[Launch] Setting experimental mode: {}",
@@ -316,6 +421,18 @@ pub async fn install_minecraft_version(
     }
     info!("User data import check complete.");
 
+    if fps_booster_enabled {
+        info!(
+            "[FPS Booster] Enabled - applying performance overrides before launch"
+        );
+        if let Err(e) = apply_fps_booster_option_overrides(&game_directory).await {
+            warn!(
+                "[FPS Booster] Failed to apply Minecraft option overrides: {}",
+                e
+            );
+        }
+    }
+
     // Emit libraries download event
     let libraries_event_id = emit_progress_event(
         &state,
@@ -537,6 +654,28 @@ pub async fn install_minecraft_version(
             current_jvm_args.extend(custom_args);
             launch_params = launch_params.with_additional_jvm_args(current_jvm_args);
         }
+    }
+
+    if fps_booster_enabled {
+        let mut current_jvm_args = launch_params.additional_jvm_args.clone();
+        let mut appended_flags: Vec<&'static str> = Vec::new();
+        for booster_arg in FPS_BOOSTER_JVM_ARGS {
+            if !current_jvm_args.iter().any(|existing| existing == booster_arg) {
+                current_jvm_args.push((*booster_arg).to_string());
+                appended_flags.push(booster_arg);
+            }
+        }
+
+        if !appended_flags.is_empty() {
+            info!(
+                "[FPS Booster] Added JVM optimisation flags: {:?}",
+                appended_flags
+            );
+        } else {
+            info!("[FPS Booster] JVM optimisation flags already applied by profile/modloader");
+        }
+
+        launch_params = launch_params.with_additional_jvm_args(current_jvm_args);
     }
 
     // Combine Game arguments from modloader (if any) and profile settings (extra_game_args)
