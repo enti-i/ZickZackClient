@@ -116,7 +116,7 @@ export function ContentTable({
         backgroundColor: `${colors.main}10`,
         borderColor: `${colors.main}40`,
         borderBottomColor: `${colors.main}60`,
-        boxShadow: `0 8px 0 rgba(0,0,0,0.2), 0 12px 20px rgba(0,0,0,0.3), inset 0 1px 0 ${colors.main}30, inset 0 0 0 1px ${colors.main}10`,
+        boxShadow: `0 8px 0 rgba(0, 38, 22, 0.2), 0 12px 20px rgba(0, 38, 22, 0.3), inset 0 1px 0 ${colors.main}30, inset 0 0 0 1px ${colors.main}10`,
         ...createRadiusStyle(borderRadius),
       }}
       {...accessibilityProps}

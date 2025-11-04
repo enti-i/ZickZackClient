@@ -39,9 +39,9 @@ export const designTokens = {
     slow: "0.3s"
   },
   shadows: {
-    sm: "0 2px 4px rgba(0,0,0,0.1)",
-    md: "0 4px 8px rgba(0,0,0,0.15)",
-    lg: "0 8px 16px rgba(0,0,0,0.2)"
+    sm: "0 2px 4px rgba(0, 38, 22, 0.1)",
+    md: "0 4px 8px rgba(0, 38, 22, 0.15)",
+    lg: "0 8px 16px rgba(0, 38, 22, 0.2)"
   }
 };
 
@@ -87,14 +87,14 @@ export const getVariantColors = (variant: ComponentVariant, accentColor: AccentC
         main: "transparent",
         light: "transparent", 
         dark: "transparent",
-        text: "#ffffff"
+        text: "#dfffe9"
       };
     default:
       return {
         main: accentColor.value,
         light: accentColor.hoverValue || accentColor.value,
         dark: accentColor.value,
-        text: "#ffffff"
+        text: "#dfffe9"
       };
   }
 };

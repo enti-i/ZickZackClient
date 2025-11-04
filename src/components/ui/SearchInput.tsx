@@ -103,7 +103,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         variant === "3d"
       ) {
         gsap.to(containerRef.current, {
-          boxShadow: `0 6px 0 rgba(0,0,0,0.25), 0 8px 12px rgba(0,0,0,0.4)`,
+          boxShadow: `0 6px 0 rgba(0, 38, 22, 0.25), 0 8px 12px rgba(0, 38, 22, 0.4)`,
           duration: 0.2,
           ease: "power2.out",
         });
@@ -120,7 +120,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         variant === "3d"
       ) {
         gsap.to(containerRef.current, {
-          boxShadow: `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35)`,
+          boxShadow: `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35)`,
           duration: 0.2,
           ease: "power2.out",
         });
@@ -170,7 +170,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         main: accentColor.value,
         light: accentColor.hoverValue,
         dark: accentColor.value,
-        text: "#ffffff",
+        text: "#dfffe9",
       };
     };
 
@@ -198,8 +198,8 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         return "none";
 
       return isHovered || isFocused
-        ? `0 6px 0 rgba(0,0,0,0.25), 0 8px 12px rgba(0,0,0,0.4), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`
-        : `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+        ? `0 6px 0 rgba(0, 38, 22, 0.25), 0 8px 12px rgba(0, 38, 22, 0.4), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`
+        : `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
     };    const standardInputContent = (
       <>
         {variant === "3d" && (
@@ -356,7 +356,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           "flex items-center justify-center w-full",
           "text-shadow-sm",
           getBorderClasses(),
-          "focus-within:outline-none focus-within:ring-2 focus-within:ring-white/30 focus-within:ring-offset-1 focus-within:ring-offset-black/20",
+          "focus-within:outline-none focus-within:ring-2 focus-within:ring-white/30 focus-within:ring-offset-1 focus-within:ring-offset-[rgba(0,38,22,0.3)]",
           disabled && "opacity-50 cursor-not-allowed",
           sizeStyles[size].container,
           sizeStyles[size].padding,

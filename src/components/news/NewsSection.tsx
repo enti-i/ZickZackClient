@@ -228,11 +228,11 @@ export function NewsSection({ className }: NewsSectionProps) {
           className="sticky bottom-0 left-0 right-0 h-20 pointer-events-none z-10"
           style={{
             background: `linear-gradient(to top,
-              rgba(0, 0, 0, ${(fadeStrength * 0.01)}) 0%,
-              rgba(0, 0, 0, ${(fadeStrength * 0.0075)}) 25%,
-              rgba(0, 0, 0, ${(fadeStrength * 0.005)}) 50%,
-              rgba(0, 0, 0, ${(fadeStrength * 0.0025)}) 75%,
-              rgba(0, 0, 0, 0) 100%)`,
+              rgba(0, 38, 22,  ${(fadeStrength * 0.01)}) 0%,
+              rgba(0, 38, 22,  ${(fadeStrength * 0.0075)}) 25%,
+              rgba(0, 38, 22,  ${(fadeStrength * 0.005)}) 50%,
+              rgba(0, 38, 22,  ${(fadeStrength * 0.0025)}) 75%,
+              rgba(0, 38, 22,  0) 100%)`,
           }}
         />
       </div>

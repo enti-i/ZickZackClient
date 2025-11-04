@@ -73,7 +73,7 @@ export function Select({
 
     if (triggerRef.current && shouldAnimate && variant === "3d") {
       gsap.to(triggerRef.current, {
-        boxShadow: `0 6px 0 rgba(0,0,0,0.25), 0 8px 12px rgba(0,0,0,0.4)`,
+        boxShadow: `0 6px 0 rgba(0, 38, 22, 0.25), 0 8px 12px rgba(0, 38, 22, 0.4)`,
         duration: 0.2,
         ease: "power2.out",
       });
@@ -87,7 +87,7 @@ export function Select({
 
     if (triggerRef.current && shouldAnimate && variant === "3d") {
       gsap.to(triggerRef.current, {
-        boxShadow: `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35)`,
+        boxShadow: `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35)`,
         duration: 0.2,
         ease: "power2.out",
       });
@@ -123,7 +123,7 @@ export function Select({
       main: accentColor.value,
       light: accentColor.hoverValue,
       dark: accentColor.value,
-      text: "#ffffff",
+      text: "#dfffe9",
     };
   };
 
@@ -146,8 +146,8 @@ export function Select({
     if (variant !== "3d") return "none";
 
     return isHovered || isOpen
-      ? `0 6px 0 rgba(0,0,0,0.25), 0 8px 12px rgba(0,0,0,0.4), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`
-      : `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
+      ? `0 6px 0 rgba(0, 38, 22, 0.25), 0 8px 12px rgba(0, 38, 22, 0.4), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`
+      : `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`;
   };
 
   const buttonContent = (
@@ -241,7 +241,7 @@ export function Select({
           "text-shadow-sm",
           getBorderClasses(),
           getRadiusClasses(borderRadius, "input"),
-          "focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-1 focus:ring-offset-black/20",
+          "focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-1 focus:ring-offset-[rgba(0,38,22,0.3)]",
           disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
           sizeStyles[size].container,
           sizeStyles[size].padding,

@@ -71,10 +71,10 @@ export const SkeletonSkinCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
       if (shadowDepth === "none") return "none";
 
       if (shadowDepth === "short") {
-        return `0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.35), inset 0 1px 0 ${accentColor.value}20, inset 0 0 0 1px ${accentColor.value}10`;
+        return `0 4px 0 rgba(0, 38, 22, 0.3), 0 6px 10px rgba(0, 38, 22, 0.35), inset 0 1px 0 ${accentColor.value}20, inset 0 0 0 1px ${accentColor.value}10`;
       }
 
-      return `0 8px 0 rgba(0,0,0,0.3), 0 10px 15px rgba(0,0,0,0.35), inset 0 1px 0 ${accentColor.value}20, inset 0 0 0 1px ${accentColor.value}10`;
+      return `0 8px 0 rgba(0, 38, 22, 0.3), 0 10px 15px rgba(0, 38, 22, 0.35), inset 0 1px 0 ${accentColor.value}20, inset 0 0 0 1px ${accentColor.value}10`;
     };
 
     const getBgColor = () => {

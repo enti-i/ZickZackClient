@@ -296,7 +296,7 @@ export function ColorPickerModal({ onClose, onColorSelected }: ColorPickerModalP
         </div>
 
         {/* Current Color Display */}
-        <div className="flex items-center justify-between p-4 rounded-lg border border-[#ffffff20] bg-black/20">
+        <div className="flex items-center justify-between p-4 rounded-lg border border-[rgba(var(--surface-border-rgb),0.2)] bg-black/20">
           <div className="flex items-center gap-3">
             <div
               className="w-12 h-12 rounded-lg border-2 border-white/20 shadow-lg"

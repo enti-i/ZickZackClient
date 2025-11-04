@@ -110,7 +110,7 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
           <div className="flex justify-center pt-4">
             <Button
               variant="ghost"
-              className="flex items-center gap-2 px-6 py-3 border border-[#ffffff20] hover:bg-white/5 transition-colors"
+              className="flex items-center gap-2 px-6 py-3 border border-[rgba(var(--surface-border-rgb),0.2)] hover:bg-white/5 transition-colors"
               onClick={() => handleOpenUrl("https://blog.norisk.gg/open-source-licenses/")}
             >
               <Icon icon="solar:external-link-bold" className="w-5 h-5" />

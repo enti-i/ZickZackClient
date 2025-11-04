@@ -108,7 +108,7 @@ export function GlobalToaster() {
           backgroundColor: `${accentColor.value}30`,
           borderColor: `${accentColor.value}80`,
           borderBottomColor: accentColor.value,
-          color: "#ffffff",
+          color: "#dfffe9",
         };
     }
   };
@@ -129,7 +129,7 @@ export function GlobalToaster() {
             backgroundColor: `${accentColor.value}30`,
             borderColor: `${accentColor.value}80`,
             borderBottomColor: accentColor.value,
-            color: "#ffffff",
+            color: "#dfffe9",
             minWidth: "300px",
             transition: "all 0.2s ease",
             fontWeight: "500",
@@ -165,7 +165,7 @@ export function GlobalToaster() {
             },
             iconTheme: {
               primary: accentColor.value,
-              secondary: "#ffffff",
+              secondary: "#dfffe9",
             },
             duration: Infinity,
           },

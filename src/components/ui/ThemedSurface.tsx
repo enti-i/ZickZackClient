@@ -66,7 +66,7 @@ export function ThemedSurface({
     const g = parseInt(pureHex.substring(2, 4), 16);
     const b = parseInt(pureHex.substring(4, 6), 16);
     if (isNaN(r) || isNaN(g) || isNaN(b)) {
-      return `rgba(0, 0, 0, ${alpha})`;
+      return `rgba(0, 38, 22,  ${alpha})`;
     }
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };

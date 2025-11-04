@@ -32,7 +32,12 @@ export function NebulaParticles({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const accentColor = useThemeStore((state) => state.accentColor);
   const isBackgroundAnimationEnabled = useThemeStore((state) => state.isBackgroundAnimationEnabled);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const visibleRef = useRef<boolean>(true);
   const animationFrameIdRef = useRef<number>();
   const lastFrameTimeRef = useRef<number>(0);
@@ -67,12 +72,20 @@ export function NebulaParticles({
 
     observer.observe(canvas);
 
-    const qualityMultiplier =
+    const baseMultiplier =
       qualityLevel === "low" ? 0.3 : qualityLevel === "high" ? 0.8 : 0.5;
-    const adjustedParticleCount = Math.floor(particleCount * qualityMultiplier);
+    const boosterMultiplier = fpsBoosterEnabled ? 0.6 : 1;
+    const qualityMultiplier = baseMultiplier * boosterMultiplier;
+    const adjustedParticleCount = Math.max(
+      10,
+      Math.floor(particleCount * qualityMultiplier),
+    );
     const adjustedSpeed = speed * qualityMultiplier;
-    const targetFps =
+    const baseTargetFps =
       qualityLevel === "low" ? 20 : qualityLevel === "high" ? 30 : 24;
+    const targetFps = fpsBoosterEnabled
+      ? Math.max(16, Math.floor(baseTargetFps * 0.75))
+      : baseTargetFps;
     const frameInterval = 1000 / targetFps;
 
     const hexToRgb = (hex: string) => {

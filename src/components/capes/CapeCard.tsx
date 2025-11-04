@@ -132,7 +132,7 @@ export function CapeCard({
               <div
                 className="absolute top-1 left-1 bg-accent text-accent-foreground px-1.5 py-0.5 text-xs font-bold rounded-sm pixelated-text shadow-md uppercase z-10"
                 title="This cape includes an Elytra texture."
-                style={{ backgroundColor: accentColor.value, color: "#ffffff" }}
+                style={{ backgroundColor: accentColor.value, color: "#dfffe9" }}
               >
                 Elytra
               </div>

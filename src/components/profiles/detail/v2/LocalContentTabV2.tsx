@@ -811,7 +811,7 @@ export function LocalContentTabV2<T extends LocalContentItem>({
                           style={{
                             backgroundColor: "rgb(20, 20, 20)",
                             border: `2px solid rgba(${parseInt(accentColor.value.substring(1, 3), 16)}, ${parseInt(accentColor.value.substring(3, 5), 16)}, ${parseInt(accentColor.value.substring(5, 7), 16)}, 0.6)`,
-                            boxShadow: `0 6px 16px rgba(0, 0, 0, 0.7)`,
+                            boxShadow: `0 6px 16px rgba(0, 45, 25, 0.55)`,
                             padding: "12px",
                             minWidth: "170px",
                             visibility: "hidden",

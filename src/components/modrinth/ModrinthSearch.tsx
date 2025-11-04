@@ -1466,7 +1466,7 @@ export const ModrinthSearch: React.FC<ModrinthSearchProps> = ({
         <div
           className="fixed bottom-4 right-4 backdrop-blur-md px-4 py-3 font-minecraft-ten text-2xl shadow-md z-50 tracking-wide lowercase select-none"
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backgroundColor: "rgba(0, 42, 24, 0.7)",
             borderColor: "rgba(239, 68, 68, 0.3)",
             borderWidth: "1px",
             color: "white",

@@ -63,8 +63,8 @@ export function RetroGridEffect({
     bottom: "-10%",
     animation: shouldAnimate ? "moveGrid 10s linear infinite" : "none",
     WebkitMaskImage:
-      "linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 60%)",
-    maskImage: "linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 60%)",
+      "linear-gradient(to top, rgba(0, 38, 22, 1) 10%, rgba(0, 38, 22, 0) 60%)",
+    maskImage: "linear-gradient(to top, rgba(0, 38, 22, 1) 10%, rgba(0, 38, 22, 0) 60%)",
   };
 
   const topGridStyle: React.CSSProperties = {
@@ -75,9 +75,9 @@ export function RetroGridEffect({
       ? "moveGridReverse 10s linear infinite"
       : "none",
     WebkitMaskImage:
-      "linear-gradient(to bottom, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 60%)",
+      "linear-gradient(to bottom, rgba(0, 38, 22, 1) 10%, rgba(0, 38, 22, 0) 60%)",
     maskImage:
-      "linear-gradient(to bottom, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 60%)",
+      "linear-gradient(to bottom, rgba(0, 38, 22, 1) 10%, rgba(0, 38, 22, 0) 60%)",
   };
 
   const keyframes = `

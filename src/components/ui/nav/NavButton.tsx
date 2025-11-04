@@ -33,14 +33,14 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
             main: "transparent",
             light: "transparent",
             dark: "transparent",
-            text: "#ffffff",
+            text: "#dfffe9",
           };
         default:
           return {
             main: accentColor.value,
             light: accentColor.hoverValue,
             dark: accentColor.value,
-            text: "#ffffff",
+            text: "#dfffe9",
           };
       }
     };
@@ -51,15 +51,15 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
       "font-minecraft relative overflow-hidden transition-all duration-300",
       "w-16 h-16 rounded-md text-white flex items-center justify-center",
       "text-shadow-sm",
-      "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-1 focus-visible:ring-offset-black/20",
+      "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-1 focus-visible:ring-offset-[rgba(0,38,22,0.3)]",
     );
 
     const activeStateClasses = cn(
       variant !== "ghost" && [
         "border-2 border-b-4",
-        "shadow-[0_6px_0_rgba(0,0,0,0.25),0_8px_15px_rgba(0,0,0,0.3)]",
-        "hover:translate-y-[-2px] hover:shadow-[0_8px_0_rgba(0,0,0,0.2),0_10px_20px_rgba(0,0,0,0.25)]",
-        "active:translate-y-[2px] active:shadow-[0_3px_0_rgba(0,0,0,0.15),0_4px_8px_rgba(0,0,0,0.2)]",
+        "shadow-[0_6px_0_rgba(0,45,25,0.4),0_8px_15px_rgba(0,32,20,0.45)]",
+        "hover:translate-y-[-2px] hover:shadow-[0_8px_0_rgba(0,50,28,0.45),0_10px_20px_rgba(0,38,22,0.5)]",
+        "active:translate-y-[2px] active:shadow-[0_3px_0_rgba(0,30,18,0.35),0_4px_8px_rgba(0,32,20,0.4)]",
       ],
       "hover:brightness-110 active:brightness-90",
     );
@@ -69,7 +69,7 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
       borderColor: `${colors.main}90`,
       borderTopColor: colors.light,
       borderBottomColor: colors.dark,
-      boxShadow: `0 6px 0 rgba(0,0,0,0.25), 0 8px 15px rgba(0,0,0,0.3), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`,
+      boxShadow: `0 6px 0 rgba(0, 40, 22, 0.45), 0 8px 15px rgba(0, 30, 18, 0.45), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`,
       color: colors.text,
     };
 
@@ -101,7 +101,7 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
       >
         <span
           className={cn(
-            "absolute inset-0 bg-gradient-radial from-white/30 via-transparent to-transparent",
+            "absolute inset-0 bg-gradient-radial from-[rgba(var(--accent-rgb),0.25)] via-transparent to-transparent",
             isActive
               ? "opacity-30"
               : "opacity-0 transition-opacity duration-300",
