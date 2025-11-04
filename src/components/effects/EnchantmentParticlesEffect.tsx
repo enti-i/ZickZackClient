@@ -44,7 +44,12 @@ export function EnchantmentParticlesEffect({
   });
   const animationFrameRef = useRef<number>();
   const lastFrameTimeRef = useRef<number>(0);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const visibleRef = useRef<boolean>(true);
   const isWindowFocused = useWindowFocus();
   const shouldRender = forceEnable || isBackgroundAnimationEnabled;
@@ -77,12 +82,20 @@ export function EnchantmentParticlesEffect({
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    const qualityMultiplier =
+    const baseMultiplier =
       qualityLevel === "low" ? 0.3 : qualityLevel === "high" ? 0.8 : 0.5;
-    const adjustedParticleCount = Math.floor(particleCount * qualityMultiplier);
+    const boosterMultiplier = fpsBoosterEnabled ? 0.65 : 1;
+    const qualityMultiplier = baseMultiplier * boosterMultiplier;
+    const adjustedParticleCount = Math.max(
+      10,
+      Math.floor(particleCount * qualityMultiplier),
+    );
     const adjustedSpeed = speed * qualityMultiplier;
-    const targetFps =
+    const baseTargetFps =
       qualityLevel === "low" ? 24 : qualityLevel === "high" ? 40 : 30;
+    const targetFps = fpsBoosterEnabled
+      ? Math.max(18, Math.floor(baseTargetFps * 0.75))
+      : baseTargetFps;
     const frameInterval = 1000 / targetFps;
 
     const enchantmentChars = [

@@ -207,7 +207,7 @@ export function ProfilesTab() {
     
     // Always add NoRisk Client group first if there are profiles with that group
     if (noriskClientProfiles.length > 0) {
-      result["NoRisk Client"] = noriskClientProfiles;
+      result["ZickZack Client"] = noriskClientProfiles;
     }
     
     // Group other profiles based on criterion
@@ -246,8 +246,8 @@ export function ProfilesTab() {
 
   const sortedGroupKeys = Object.keys(groupedProfiles).sort((a, b) => {
     // NoRisk Client should always be first
-    if (a === "NoRisk Client") return -1;
-    if (b === "NoRisk Client") return 1;
+    if (a === "ZickZack Client") return -1;
+    if (b === "ZickZack Client") return 1;
     
     const specialKeys = [
       "All Profiles",

@@ -33,17 +33,34 @@ export default function EffectPreviewCard({
   const { accentColor } = useThemeStore();
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
 
   const getQualityParams = () => {
-    switch (qualityLevel) {
-      case "low":
-        return { particleCount: 30, opacity: 0.3, speed: 0.5 };
-      case "high":
-        return { particleCount: 80, opacity: 0.4, speed: 1.5 };
-      default: // medium
-        return { particleCount: 50, opacity: 0.3, speed: 1 };
+    const baseParams = (() => {
+      switch (qualityLevel) {
+        case "low":
+          return { particleCount: 30, opacity: 0.3, speed: 0.5 };
+        case "high":
+          return { particleCount: 80, opacity: 0.4, speed: 1.5 };
+        default:
+          return { particleCount: 50, opacity: 0.3, speed: 1 };
+      }
+    })();
+
+    if (!fpsBoosterEnabled) {
+      return baseParams;
     }
+
+    return {
+      particleCount: Math.max(12, Math.floor(baseParams.particleCount * 0.6)),
+      opacity: baseParams.opacity * 0.75,
+      speed: baseParams.speed * 0.8,
+    };
   };
 
   const qualityParams = getQualityParams();

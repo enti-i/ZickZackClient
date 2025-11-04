@@ -45,9 +45,9 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         norisk: {
-          DEFAULT: "#125a9d",
-          light: "#1a6ebd",
-          dark: "#0e4678",
+          DEFAULT: "#00ff66",
+          light: "#33ff85",
+          dark: "#00cc52",
         },
         panel: {
           DEFAULT: "#1e1e1e",
@@ -78,9 +78,9 @@ module.exports = {
         },
       },
       boxShadow: {
-        glow: "0 0 10px rgba(18, 90, 157, 0.4)",
-        "glow-lg": "0 0 20px rgba(18, 90, 157, 0.6)",
-        "inner-glow": "inset 0 0 10px rgba(18, 90, 157, 0.4)",
+        glow: "0 0 10px rgba(0, 255, 102, 0.4)",
+        "glow-lg": "0 0 20px rgba(0, 255, 102, 0.6)",
+        "inner-glow": "inset 0 0 10px rgba(0, 255, 102, 0.4)",
       },
     },
   },
