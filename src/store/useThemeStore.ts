@@ -355,8 +355,13 @@ export const useThemeStore = create<ThemeState>()(
 
       toggleStaticBackground: () => {
         set((state) => ({ staticBackground: !state.staticBackground }));
-      },      acceptTermsOfService: () => {
-        set({ hasAcceptedTermsOfService: true });      },      applyAccentColorToDOM: () => {
+      },
+
+      acceptTermsOfService: () => {
+        set({ hasAcceptedTermsOfService: true });
+      },
+
+      applyAccentColorToDOM: () => {
         const { accentColor } = get();
 
         const hexToRgb = (hex: string) => {
@@ -391,12 +396,20 @@ export const useThemeStore = create<ThemeState>()(
         if (rgbValue) {
           document.documentElement.style.setProperty("--accent-rgb", rgbValue);
         }
-      },      applyBorderRadiusToDOM: () => {
+      },
+
+      applyBorderRadiusToDOM: () => {
         const { borderRadius } = get();
-        
-        document.documentElement.style.setProperty("--border-radius", `${borderRadius}px`);
-        
-        document.documentElement.setAttribute("data-border-radius", borderRadius.toString());
+
+        document.documentElement.style.setProperty(
+          "--border-radius",
+          `${borderRadius}px`,
+        );
+
+        document.documentElement.setAttribute(
+          "data-border-radius",
+          borderRadius.toString(),
+        );
         if (borderRadius === 0) {
           document.documentElement.classList.add("radius-flat");
         } else {
@@ -454,7 +467,8 @@ export const useThemeStore = create<ThemeState>()(
       setFeatureMode: (enabled: boolean) => {
         set({ featureMode: enabled });
       },
-    }),    {
+    }),
+    {
       name: "norisk-theme-storage",
       onRehydrateStorage: () => (state) => {
         if (state) {

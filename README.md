@@ -44,7 +44,6 @@ Or run one of the bundled helper scripts to install dependencies and produce a r
 
 Use the `--help`/`-Help` flag to see all capabilities. Highlights include logging to a file, non-interactive CI output, choosing a Rust target triple, forcing debug builds, and skipping the build entirely when you only want dependencies.
 
-=======
 ### Development Workflow
 
 - **Start the launcher in development mode**
