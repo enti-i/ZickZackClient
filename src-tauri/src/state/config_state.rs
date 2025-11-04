@@ -49,6 +49,8 @@ pub struct LauncherConfig {
     pub hooks: Hooks,
     #[serde(default = "default_hide_on_process_start")]
     pub hide_on_process_start: bool,
+    #[serde(default)]
+    pub fps_booster_enabled: bool,
     #[serde(default = "default_global_memory_settings")]
     pub global_memory_settings: MemorySettings,
     #[serde(default)]
@@ -105,6 +107,7 @@ impl Default for LauncherConfig {
             last_played_profile: None,
             hooks: Hooks::default(),
             hide_on_process_start: default_hide_on_process_start(),
+            fps_booster_enabled: false,
             global_memory_settings: default_global_memory_settings(),
             custom_game_directory: None,
         }

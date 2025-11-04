@@ -68,7 +68,7 @@ export function SettingsTab() {
   };
 
   const groups = createGroups();
-  const [customColor, setCustomColor] = useState("#4f8eff");
+  const [customColor, setCustomColor] = useState("#00ff66");
   const contentRef = useRef<HTMLDivElement>(null);
   const tabRef = useRef<HTMLDivElement>(null);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -88,7 +88,12 @@ export function SettingsTab() {
     toggleBackgroundAnimation,
   } = useThemeStore();
   const { currentEffect, setCurrentEffect } = useBackgroundEffectStore();
-  const { qualityLevel, setQualityLevel } = useQualitySettingsStore();
+  const {
+    qualityLevel,
+    setQualityLevel,
+    fpsBoosterEnabled,
+    setFpsBoosterEnabled,
+  } = useQualitySettingsStore();
   const { borderRadius, setBorderRadius } = useThemeStore();
 
   const { confirm, confirmDialog } = useConfirmDialog();
@@ -183,6 +188,10 @@ export function SettingsTab() {
       };
       setConfig(configWithHooks);
       setTempConfig({ ...configWithHooks });
+      setFpsBoosterEnabled(configWithHooks.fps_booster_enabled ?? false);
+      if (configWithHooks.fps_booster_enabled) {
+        setQualityLevel("low");
+      }
     } catch (err) {
       console.error("Failed to load launcher config:", err);
       setError(err instanceof Error ? err.message : String(err));
@@ -225,6 +234,14 @@ export function SettingsTab() {
   useEffect(() => {
     loadConfig();
   }, [loadConfig]);
+
+  useEffect(() => {
+    const boosterEnabled = config?.fps_booster_enabled ?? false;
+    setFpsBoosterEnabled(boosterEnabled);
+    if (boosterEnabled) {
+      setQualityLevel("low");
+    }
+  }, [config?.fps_booster_enabled, setFpsBoosterEnabled, setQualityLevel]);
 
   useEffect(() => {
     if (
@@ -336,6 +353,25 @@ export function SettingsTab() {
             onChange: (checked) =>
               tempConfig &&
               setTempConfig({ ...tempConfig, auto_check_updates: checked }),
+          },
+          {
+            id: "fps-booster",
+            label: "FPS Booster",
+            tooltip:
+              "Locks launcher visuals to performance-friendly settings and prioritizes resource-saving defaults for smoother gameplay.",
+            type: "toggle",
+            value: fpsBoosterEnabled,
+            onChange: (checked) => {
+              setFpsBoosterEnabled(checked);
+              if (checked) {
+                setQualityLevel("low");
+              }
+              setTempConfig((current) =>
+                current
+                  ? { ...current, fps_booster_enabled: checked }
+                  : current,
+              );
+            },
           },
           {
             id: "discord-presence",
@@ -480,22 +516,34 @@ export function SettingsTab() {
                 />
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-xs text-white/60 font-minecraft-ten">Quality: Low</span>
+                <span className="text-xs text-white/60 font-minecraft-ten">
+                  {fpsBoosterEnabled ? "FPS Booster Active" : "Quality: Low"}
+                </span>
                 <input
                   type="range"
                   min="0"
                   max="2"
                   step="1"
-                  value={qualityLevel === "low" ? 0 : qualityLevel === "medium" ? 1 : 2}
+                  value={
+                    fpsBoosterEnabled
+                      ? 0
+                      : qualityLevel === "low"
+                        ? 0
+                        : qualityLevel === "medium"
+                          ? 1
+                          : 2
+                  }
                   onChange={(e) => {
                     const value = parseInt(e.target.value);
                     const levels = ["low", "medium", "high"] as const;
                     setQualityLevel(levels[value] || "medium");
                   }}
                   className="w-16 h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider accent-white hover:accent-white/80 transition-colors"
-                  disabled={saving}
+                  disabled={saving || fpsBoosterEnabled}
                 />
-                <span className="text-xs text-white/60 font-minecraft-ten">High</span>
+                <span className="text-xs text-white/60 font-minecraft-ten">
+                  {fpsBoosterEnabled ? "Locked" : "High"}
+                </span>
               </div>
             </div>
           </div>

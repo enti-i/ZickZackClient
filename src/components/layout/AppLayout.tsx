@@ -65,7 +65,12 @@ export function AppLayout({
   const maximizeRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLDivElement>(null);
   const { currentEffect } = useBackgroundEffectStore();
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const { isBackgroundAnimationEnabled, accentColor: themeAccentColor, accentColor } = useThemeStore();
 
   const getComplementaryBackground = () => {
@@ -96,14 +101,26 @@ export function AppLayout({
   const backgroundColor = getComplementaryBackground();
 
   const getQualityParams = () => {
-    switch (qualityLevel) {
-      case "low":
-        return { particleCount: 30, opacity: 0.2, speed: 0.5 };
-      case "high":
-        return { particleCount: 80, opacity: 0.4, speed: 1.5 };
-      default:
-        return { particleCount: 50, opacity: 0.3, speed: 1 };
+    const baseParams = (() => {
+      switch (qualityLevel) {
+        case "low":
+          return { particleCount: 30, opacity: 0.2, speed: 0.5 };
+        case "high":
+          return { particleCount: 80, opacity: 0.4, speed: 1.5 };
+        default:
+          return { particleCount: 50, opacity: 0.3, speed: 1 };
+      }
+    })();
+
+    if (!fpsBoosterEnabled) {
+      return baseParams;
     }
+
+    return {
+      particleCount: Math.max(12, Math.floor(baseParams.particleCount * 0.5)),
+      opacity: baseParams.opacity * 0.65,
+      speed: baseParams.speed * 0.75,
+    };
   };
 
   const qualityParams = getQualityParams();

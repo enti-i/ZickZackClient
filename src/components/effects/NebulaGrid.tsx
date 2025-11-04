@@ -21,7 +21,12 @@ export function NebulaGrid({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const accentColor = useThemeStore((state) => state.accentColor);
   const isBackgroundAnimationEnabled = useThemeStore((state) => state.isBackgroundAnimationEnabled);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const isWindowFocused = useWindowFocus();
   
   // Animation timing state management
@@ -44,15 +49,20 @@ export function NebulaGrid({
     let animationFrameId: number;
     let effectiveTime = 0;
 
-    const qualityMultiplier =
+    const baseMultiplier =
       qualityLevel === "low" ? 0.5 : qualityLevel === "high" ? 1.5 : 1;
+    const boosterMultiplier = fpsBoosterEnabled ? 0.7 : 1;
+    const qualityMultiplier = baseMultiplier * boosterMultiplier;
     const adjustedSpeed = speed * qualityMultiplier;
-    const adjustedGridSize =
-      qualityLevel === "low"
-        ? gridSize * 1.5
-        : qualityLevel === "high"
-          ? gridSize * 0.7
-          : gridSize;
+    const adjustedGridSize = (() => {
+      const baseSize =
+        qualityLevel === "low"
+          ? gridSize * 1.5
+          : qualityLevel === "high"
+            ? gridSize * 0.7
+            : gridSize;
+      return fpsBoosterEnabled ? baseSize * 1.1 : baseSize;
+    })();
 
     const hexToRgb = (hex: string) => {
       const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
