@@ -10,6 +10,7 @@ export type AccentColor = {
   shadowValue: string;
   light: string;
   dark: string;
+  hslValue?: string;
   isCustom?: boolean;
 };
 
@@ -21,6 +22,7 @@ export const ACCENT_COLORS: Record<string, AccentColor> = {
     shadowValue: "rgba(0, 255, 102, 0.5)",
     light: "#33ff85",
     dark: "#009944",
+    hslValue: "150 100% 52%",
   },
 };
 
@@ -36,9 +38,8 @@ const calculateColorVariants = (baseColor: string): Partial<AccentColor> => {
       : null;
   };
 
-  const rgbToHex = (r: number, g: number, b: number) => {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  };
+  const rgbToHex = (r: number, g: number, b: number) =>
+    "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 
   const darken = (hex: string, amount: number) => {
     const rgb = hexToRgb(hex);
@@ -69,12 +70,49 @@ const calculateColorVariants = (baseColor: string): Partial<AccentColor> => {
     return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`;
   };
 
+  const rgbToHsl = (r: number, g: number, b: number) => {
+    const rNorm = r / 255;
+    const gNorm = g / 255;
+    const bNorm = b / 255;
+
+    const max = Math.max(rNorm, gNorm, bNorm);
+    const min = Math.min(rNorm, gNorm, bNorm);
+    const delta = max - min;
+
+    let h = 0;
+    if (delta !== 0) {
+      if (max === rNorm) {
+        h = ((gNorm - bNorm) / delta) % 6;
+      } else if (max === gNorm) {
+        h = (bNorm - rNorm) / delta + 2;
+      } else {
+        h = (rNorm - gNorm) / delta + 4;
+      }
+      h *= 60;
+      if (h < 0) {
+        h += 360;
+      }
+    }
+
+    const l = (max + min) / 2;
+    const s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    return `${Math.round(h)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
+  };
+
+  const hslValue = (() => {
+    const rgb = hexToRgb(baseColor);
+    if (!rgb) return undefined;
+    return rgbToHsl(rgb.r, rgb.g, rgb.b);
+  })();
+
   return {
     value: baseColor,
     hoverValue: darken(baseColor, 0.1),
     shadowValue: calculateShadow(baseColor),
     light: lighten(baseColor, 0.2),
     dark: darken(baseColor, 0.2),
+    hslValue,
     isCustom: true,
   };
 };
@@ -227,8 +265,13 @@ export const useThemeStore = create<ThemeState>()(
 
       toggleStaticBackground: () => {
         set((state) => ({ staticBackground: !state.staticBackground }));
-      },      acceptTermsOfService: () => {
-        set({ hasAcceptedTermsOfService: true });      },      applyAccentColorToDOM: () => {
+      },
+
+      acceptTermsOfService: () => {
+        set({ hasAcceptedTermsOfService: true });
+      },
+
+      applyAccentColorToDOM: () => {
         const { accentColor } = get();
 
         const hexToRgb = (hex: string) => {
@@ -236,6 +279,39 @@ export const useThemeStore = create<ThemeState>()(
           return result
             ? `${Number.parseInt(result[1], 16)}, ${Number.parseInt(result[2], 16)}, ${Number.parseInt(result[3], 16)}`
             : null;
+        };
+
+        const hexToHsl = (hex: string) => {
+          const rgbMatch = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+          if (!rgbMatch) return null;
+
+          const r = Number.parseInt(rgbMatch[1], 16) / 255;
+          const g = Number.parseInt(rgbMatch[2], 16) / 255;
+          const b = Number.parseInt(rgbMatch[3], 16) / 255;
+
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const delta = max - min;
+
+          let h = 0;
+          if (delta !== 0) {
+            if (max === r) {
+              h = ((g - b) / delta) % 6;
+            } else if (max === g) {
+              h = (b - r) / delta + 2;
+            } else {
+              h = (r - g) / delta + 4;
+            }
+            h *= 60;
+            if (h < 0) {
+              h += 360;
+            }
+          }
+
+          const l = (max + min) / 2;
+          const s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+          return `${Math.round(h)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
         };
 
         document.documentElement.style.setProperty(
@@ -259,15 +335,22 @@ export const useThemeStore = create<ThemeState>()(
           accentColor.dark,
         );
 
+        const hslValue = accentColor.hslValue ?? hexToHsl(accentColor.value);
+        if (hslValue) {
+          document.documentElement.style.setProperty("--accent-hsl", hslValue);
+        }
+
         const rgbValue = hexToRgb(accentColor.value);
         if (rgbValue) {
           document.documentElement.style.setProperty("--accent-rgb", rgbValue);
         }
-      },      applyBorderRadiusToDOM: () => {
+      },
+
+      applyBorderRadiusToDOM: () => {
         const { borderRadius } = get();
-        
+
         document.documentElement.style.setProperty("--border-radius", `${borderRadius}px`);
-        
+
         document.documentElement.setAttribute("data-border-radius", borderRadius.toString());
         if (borderRadius === 0) {
           document.documentElement.classList.add("radius-flat");
@@ -326,7 +409,8 @@ export const useThemeStore = create<ThemeState>()(
       setFeatureMode: (enabled: boolean) => {
         set({ featureMode: enabled });
       },
-    }),    {
+    }),
+    {
       name: "norisk-theme-storage",
       onRehydrateStorage: () => (state) => {
         if (state) {
@@ -334,7 +418,7 @@ export const useThemeStore = create<ThemeState>()(
           if (state.profileGroupingCriterion === "none") {
             state.profileGroupingCriterion = "group";
           }
-          
+
           state.applyAccentColorToDOM();
           state.applyBorderRadiusToDOM();
           // Ensure collapsedProfileGroups exists after rehydrate
