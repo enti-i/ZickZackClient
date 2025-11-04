@@ -21,10 +21,17 @@ export function NebulaLiquidChrome({
   className = "",
 }: NebulaLiquidChromeProps) {
   const accentColor = useThemeStore((state) => state.accentColor);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
 
-  const qualityMultiplier =
+  const baseMultiplier =
     qualityLevel === "low" ? 0.3 : qualityLevel === "high" ? 0.8 : 0.5;
+  const boosterMultiplier = fpsBoosterEnabled ? 0.65 : 1;
+  const qualityMultiplier = baseMultiplier * boosterMultiplier;
   const adjustedSpeed = speed * qualityMultiplier;
   const adjustedAmplitude = amplitude * qualityMultiplier;
 

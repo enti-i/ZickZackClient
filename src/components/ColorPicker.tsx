@@ -19,7 +19,7 @@ export function ColorPicker({
 }: ColorPickerProps) {
   const { accentColor, setAccentColor, setCustomAccentColor, customColorHistory } = useThemeStore();
   const [showCustomPicker, setShowCustomPicker] = useState(false);
-  const [customColor, setCustomColor] = useState("#4f8eff");
+  const [customColor, setCustomColor] = useState("#00ff66");
 
   const sizeClasses = {
     sm: "w-8 h-8",

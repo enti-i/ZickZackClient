@@ -21,7 +21,12 @@ export function NebulaWaves({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const accentColor = useThemeStore((state) => state.accentColor);
   const isBackgroundAnimationEnabled = useThemeStore((state) => state.isBackgroundAnimationEnabled);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const [isVisible, setIsVisible] = useState(true);
   const isWindowFocused = useWindowFocus();
   
@@ -56,13 +61,18 @@ export function NebulaWaves({
     let effectiveTime = 0;
     let lastFrameTime = 0;
 
-    const qualityMultiplier =
+    const baseMultiplier =
       qualityLevel === "low" ? 0.3 : qualityLevel === "high" ? 0.8 : 0.5;
+    const boosterMultiplier = fpsBoosterEnabled ? 0.7 : 1;
+    const qualityMultiplier = baseMultiplier * boosterMultiplier;
     const adjustedSpeed = speed * qualityMultiplier;
     const waveCount =
       qualityLevel === "low" ? 2 : qualityLevel === "high" ? 3 : 2;
-    const targetFps =
+    const baseTargetFps =
       qualityLevel === "low" ? 20 : qualityLevel === "high" ? 30 : 24;
+    const targetFps = fpsBoosterEnabled
+      ? Math.max(16, Math.floor(baseTargetFps * 0.75))
+      : baseTargetFps;
     const frameInterval = 1000 / targetFps;
 
     const hexToRgb = (hex: string) => {

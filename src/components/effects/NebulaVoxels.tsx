@@ -35,7 +35,12 @@ export function NebulaVoxels({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const accentColor = useThemeStore((state) => state.accentColor);
   const isBackgroundAnimationEnabled = useThemeStore((state) => state.isBackgroundAnimationEnabled);
-  const { qualityLevel } = useQualitySettingsStore();
+  const qualityLevel = useQualitySettingsStore((state) =>
+    state.fpsBoosterEnabled ? "low" : state.qualityLevel,
+  );
+  const fpsBoosterEnabled = useQualitySettingsStore(
+    (state) => state.fpsBoosterEnabled,
+  );
   const visibleRef = useRef<boolean>(true);
   const animationFrameIdRef = useRef<number>();
   const lastFrameTimeRef = useRef<number>(0);
@@ -69,12 +74,20 @@ export function NebulaVoxels({
 
     observer.observe(canvas);
 
-    const qualityMultiplier =
+    const baseMultiplier =
       qualityLevel === "low" ? 0.3 : qualityLevel === "high" ? 0.8 : 0.5;
-    const adjustedCubeCount = Math.floor(cubeCount * qualityMultiplier);
+    const boosterMultiplier = fpsBoosterEnabled ? 0.6 : 1;
+    const qualityMultiplier = baseMultiplier * boosterMultiplier;
+    const adjustedCubeCount = Math.max(
+      10,
+      Math.floor(cubeCount * qualityMultiplier),
+    );
     const adjustedSpeed = speed * qualityMultiplier;
-    const targetFps =
+    const baseTargetFps =
       qualityLevel === "low" ? 15 : qualityLevel === "high" ? 30 : 24;
+    const targetFps = fpsBoosterEnabled
+      ? Math.max(12, Math.floor(baseTargetFps * 0.75))
+      : baseTargetFps;
     const frameInterval = 1000 / targetFps;
 
     const hexToRgb = (hex: string) => {
