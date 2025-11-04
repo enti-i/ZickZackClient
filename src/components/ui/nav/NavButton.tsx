@@ -19,7 +19,27 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
     const buttonRef = useRef<HTMLButtonElement>(null);
     const accentColor = useThemeStore((state) => state.accentColor);
 
-    const getVariantColors = () => {
+    const accentWithAlpha = (alpha: number) => {
+      const sanitized = accentColor.value.replace('#', '');
+      if (sanitized.length !== 6) {
+        return `rgba(0, 255, 102, ${alpha})`;
+      }
+
+      const bigint = Number.parseInt(sanitized, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    };
+
+    const getVariantColors = (): {
+      main: string;
+      light: string;
+      dark: string;
+      text: string;
+      glow: string;
+    } => {
       switch (variant) {
         case "secondary":
           return {
@@ -27,6 +47,7 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
             light: "#9ca3af",
             dark: "#4b5563",
             text: "#f3f4f6",
+            glow: "rgba(107, 114, 128, 0.35)",
           };
         case "ghost":
           return {
@@ -34,13 +55,15 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
             light: "transparent",
             dark: "transparent",
             text: "#ffffff",
+            glow: "rgba(255, 255, 255, 0.2)",
           };
         default:
           return {
             main: accentColor.value,
-            light: accentColor.hoverValue,
-            dark: accentColor.value,
+            light: accentColor.light ?? accentWithAlpha(0.65),
+            dark: accentColor.dark ?? accentWithAlpha(0.45),
             text: "#ffffff",
+            glow: accentColor.shadowValue ?? accentWithAlpha(0.35),
           };
       }
     };
@@ -49,7 +72,7 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
 
     const baseClasses = cn(
       "font-minecraft relative overflow-hidden transition-all duration-300",
-      "w-16 h-16 rounded-md text-white flex items-center justify-center",
+      "group w-16 h-16 rounded-xl text-white flex items-center justify-center border",
       "text-shadow-sm",
       "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-1 focus-visible:ring-offset-black/20",
     );
@@ -64,14 +87,17 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
       "hover:brightness-110 active:brightness-90",
     );
     
-    const activeStateStyles: React.CSSProperties = variant === "ghost" ? {} : {
-      backgroundColor: `${colors.main}40`,
-      borderColor: `${colors.main}90`,
-      borderTopColor: colors.light,
-      borderBottomColor: colors.dark,
-      boxShadow: `0 6px 0 rgba(0,0,0,0.25), 0 8px 15px rgba(0,0,0,0.3), inset 0 1px 0 ${colors.light}40, inset 0 0 0 1px ${colors.main}20`,
-      color: colors.text,
-    };
+    const activeStateStyles: React.CSSProperties =
+      variant === "ghost"
+        ? {}
+        : {
+            background: `linear-gradient(155deg, ${accentWithAlpha(0.2)}, ${colors.main}cc)`,
+            borderColor: `${colors.main}a0`,
+            borderTopColor: colors.light,
+            borderBottomColor: colors.dark,
+            boxShadow: `0 0 24px ${colors.glow}, 0 12px 24px rgba(0,0,0,0.45), inset 0 1px 0 ${colors.light}55`,
+            color: colors.text,
+          };
 
     const nonActiveStateClasses = cn(
       variant !== "ghost" && [
@@ -81,7 +107,14 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
       "hover:brightness-110 active:brightness-90",
     );
 
-    const nonActiveStateStyles: React.CSSProperties = {};
+    const nonActiveStateStyles: React.CSSProperties =
+      variant === "ghost"
+        ? {}
+        : {
+            background: `linear-gradient(155deg, ${accentWithAlpha(0.1)}, rgba(0, 12, 6, 0.65))`,
+            borderColor: `${colors.main}40`,
+            boxShadow: `0 0 16px ${colors.glow}, inset 0 1px 0 rgba(255,255,255,0.05)`,
+          };
     if (isActive) {
       Object.assign(nonActiveStateStyles, activeStateStyles);
     } else {
@@ -96,7 +129,7 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
           isActive ? activeStateClasses : nonActiveStateClasses,
           className,
         )}
-        style={isActive ? activeStateStyles : { ...nonActiveStateStyles, borderColor: "transparent" }}
+        style={isActive ? activeStateStyles : { ...nonActiveStateStyles, borderColor: nonActiveStateStyles.borderColor ?? "transparent" }}
         {...props}
       >
         <span
@@ -106,6 +139,12 @@ export const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
               ? "opacity-30"
               : "opacity-0 transition-opacity duration-300",
           )}
+        />
+        <span
+          className="absolute inset-0 pointer-events-none mix-blend-screen opacity-0 group-hover:opacity-40 transition-opacity"
+          style={{
+            background: `radial-gradient(circle at 50% 0%, ${accentWithAlpha(0.4)}, transparent 70%)`,
+          }}
         />
         <span className="relative z-10 flex items-center justify-center w-8 h-8">
           {icon}

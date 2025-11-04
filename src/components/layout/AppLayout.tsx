@@ -31,7 +31,7 @@ import type { UpdateInfo } from "../../types/updater";
 import { ProfileWizardV2Modal } from "../modals/ProfileWizardV2Modal";
 import { ProfileSettingsModal } from "../modals/ProfileSettingsModal";
 import { ProfileDuplicateModal } from "../modals/ProfileDuplicateModal";
-import { exit, relaunch } from '@tauri-apps/plugin-process';
+import { exit } from "@tauri-apps/plugin-process";
 import { Tooltip } from "../ui/Tooltip";
 import { toast } from 'react-hot-toast';
 
@@ -71,7 +71,25 @@ export function AppLayout({
   const fpsBoosterEnabled = useQualitySettingsStore(
     (state) => state.fpsBoosterEnabled,
   );
-  const { isBackgroundAnimationEnabled, accentColor: themeAccentColor, accentColor } = useThemeStore();
+  const { isBackgroundAnimationEnabled, accentColor: themeAccentColor, accentColor } =
+    useThemeStore();
+
+  const accentLight = themeAccentColor.light ?? themeAccentColor.value;
+  const accentDark = themeAccentColor.dark ?? themeAccentColor.value;
+
+  const hexToRgba = (hex: string, alpha: number) => {
+    const sanitized = hex.replace('#', '');
+    if (sanitized.length !== 6) {
+      return `rgba(0, 255, 102, ${alpha})`;
+    }
+
+    const bigint = Number.parseInt(sanitized, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
 
   const getComplementaryBackground = () => {
     const hexToRgb = (hex: string) => {
@@ -82,20 +100,21 @@ export function AppLayout({
             g: Number.parseInt(result[2], 16),
             b: Number.parseInt(result[3], 16),
           }
-        : { r: 34, g: 34, b: 34 };
+        : { r: 6, g: 20, b: 12 };
     };
 
-    const rgb = hexToRgb(themeAccentColor.value);
+    const rgb = hexToRgb(accentDark);
 
-    const darkR = Math.floor(rgb.r * 0.1);
-    const darkG = Math.floor(rgb.g * 0.1);
-    const darkB = Math.floor(rgb.b * 0.1);
+    const mix = (channel: number, fallback: number) => {
+      const darkened = Math.floor(channel * 0.18);
+      return Math.max(fallback, Math.min(45, darkened));
+    };
 
-    const finalR = Math.min(darkR, 30);
-    const finalG = Math.min(darkG, 30);
-    const finalB = Math.min(darkB, 30);
+    const finalR = mix(rgb.r, 4);
+    const finalG = mix(rgb.g, 18);
+    const finalB = mix(rgb.b, 10);
 
-    return `rgb(${finalR}, ${finalG}, ${finalB})`;
+    return `rgba(${finalR}, ${finalG}, ${finalB}, 0.92)`;
   };
 
   const backgroundColor = getComplementaryBackground();
@@ -282,16 +301,42 @@ export function AppLayout({
   return (
     <div
       ref={launcherRef}
-      className="h-screen w-full bg-black/50 backdrop-blur-lg border-2 overflow-hidden relative flex shadow-[0_0_25px_rgba(0,0,0,0.4)]"
+      className="h-screen w-full border-2 overflow-hidden relative flex backdrop-blur-[18px] bg-black/30 shadow-[0_20px_80px_rgba(0,0,0,0.65)]"
       style={{
         backgroundColor: backgroundColor,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundImage: `linear-gradient(to bottom right, ${backgroundColor}, rgba(0,0,0,0.9))`,
-        borderColor: `${themeAccentColor.value}30`,
-        boxShadow: `0 0 15px ${themeAccentColor.value}30, inset 0 0 10px ${themeAccentColor.value}20`,
+        backgroundImage: `
+          radial-gradient(circle at 18% 20%, ${hexToRgba(themeAccentColor.value, 0.18)}, transparent 62%),
+          radial-gradient(circle at 82% 8%, ${hexToRgba(accentLight, 0.14)}, transparent 55%),
+          linear-gradient(135deg, rgba(0, 20, 12, 0.92), rgba(0, 8, 5, 0.94) 60%, rgba(0, 0, 0, 0.95))
+        `,
+        backgroundBlendMode: "screen, screen, normal",
+        backgroundSize: "160% 160%, 140% 140%, 100% 100%",
+        backgroundPosition: "0% 0%, 100% 0%, center",
+        borderColor: `${themeAccentColor.value}40`,
+        boxShadow: `0 0 55px ${hexToRgba(themeAccentColor.value, 0.28)}, inset 0 0 35px ${hexToRgba(accentDark, 0.22)}`,
+        transition: "background 0.6s ease, box-shadow 0.6s ease, border-color 0.6s ease",
       }}
     >
+      <div
+        ref={backgroundPatternRef}
+        className="absolute inset-0 pointer-events-none opacity-70 mix-blend-screen"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 20% 35%, ${hexToRgba(themeAccentColor.value, 0.2)}, transparent 60%),
+            radial-gradient(circle at 75% 15%, ${hexToRgba(accentLight, 0.16)}, transparent 55%),
+            repeating-linear-gradient(135deg, transparent 0, transparent 36px, ${hexToRgba(themeAccentColor.value, 0.08)} 36px, ${hexToRgba(themeAccentColor.value, 0.08)} 72px)
+          `,
+          backgroundSize: "180% 180%, 160% 160%, 96px 96px",
+          backgroundPosition: "0% 0%, 100% 0%, 0% 0%",
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          boxShadow: `0 0 120px ${hexToRgba(themeAccentColor.value, 0.3)} inset, 0 0 180px ${hexToRgba(themeAccentColor.value, 0.18)}`,
+          background: `radial-gradient(circle at 50% 0%, ${hexToRgba(accentLight, 0.15)}, transparent 65%)`,
+        }}
+      />
       <BorderGlowEffects accentColor={themeAccentColor.value} />
 
       <VerticalNavbar
@@ -327,6 +372,20 @@ export function AppLayout({
 }
 
 function BorderGlowEffects({ accentColor }: { accentColor: string }) {
+  const accentWithAlpha = (alpha: number) => {
+    const sanitized = accentColor.replace('#', '');
+    if (sanitized.length !== 6) {
+      return `rgba(0, 255, 102, ${alpha})`;
+    }
+
+    const bigint = Number.parseInt(sanitized, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
   return (
     <>
       <div
@@ -353,6 +412,18 @@ function BorderGlowEffects({ accentColor }: { accentColor: string }) {
           background: `linear-gradient(to bottom, transparent, ${accentColor}70, transparent)`,
         }}
       ></div>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          boxShadow: `0 0 65px ${accentWithAlpha(0.22)} inset, 0 0 120px ${accentWithAlpha(0.18)}`,
+        }}
+      ></div>
+      <div
+        className="absolute inset-12 pointer-events-none blur-3xl opacity-40"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${accentWithAlpha(0.3)}, transparent 70%)`,
+        }}
+      ></div>
     </>
   );
 }
@@ -367,6 +438,20 @@ function HeaderBar({ minimizeRef, maximizeRef, closeRef }: HeaderBarProps) {
   const accentColor = useThemeStore((state) => state.accentColor);
   const [appVersion, setAppVersion] = useState<string | null>(null);
   const [availableUpdate, setAvailableUpdate] = useState<UpdateInfo | null>(null);
+
+  const accentWithAlpha = (alpha: number) => {
+    const sanitized = accentColor.value.replace('#', '');
+    if (sanitized.length !== 6) {
+      return `rgba(0, 255, 102, ${alpha})`;
+    }
+
+    const bigint = Number.parseInt(sanitized, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
 
   const handleUpdateClick = async () => {
     try {
@@ -453,17 +538,27 @@ function HeaderBar({ minimizeRef, maximizeRef, closeRef }: HeaderBarProps) {
 
   return (
     <div
-      className="h-20 flex-shrink-0 border-b-2 backdrop-blur-lg flex items-center justify-between px-8 z-10"
+      className="relative h-20 flex-shrink-0 border-b-2 backdrop-blur-xl flex items-center justify-between px-8 z-10 overflow-hidden"
       style={{
-        borderColor: `${accentColor.value}40`,
-        backgroundColor: `rgba(${Number.parseInt(accentColor.value.slice(1, 3), 16)}, ${Number.parseInt(
-          accentColor.value.slice(3, 5),
-          16,
-        )}, ${Number.parseInt(accentColor.value.slice(5, 7), 16)}, 0.01)`,
+        borderColor: `${accentColor.value}55`,
+        background: `linear-gradient(135deg, ${accentWithAlpha(0.22)}, rgba(0, 12, 6, 0.85))`,
+        boxShadow: `0 12px 40px ${accentWithAlpha(0.16)} inset`,
       }}
       data-tauri-drag-region
     >
-      <div className="flex items-center gap-4" data-tauri-drag-region>
+      <div
+        className="absolute inset-0 pointer-events-none opacity-70"
+        style={{
+          background: `radial-gradient(circle at 15% 0%, ${accentWithAlpha(0.18)}, transparent 55%)`,
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none mix-blend-screen opacity-30"
+        style={{
+          backgroundImage: `repeating-linear-gradient(120deg, transparent, transparent 28px, ${accentWithAlpha(0.08)} 28px, ${accentWithAlpha(0.08)} 56px)`,
+        }}
+      />
+      <div className="relative flex items-center gap-4" data-tauri-drag-region>
         <NavigationHistory />
 
         <div className="flex flex-col items-start -mt-2.5">
@@ -494,7 +589,7 @@ function HeaderBar({ minimizeRef, maximizeRef, closeRef }: HeaderBarProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="relative flex items-center gap-4">
         <UserProfileBar />
 
         <WindowControls
@@ -518,27 +613,70 @@ function WindowControls({
   maximizeRef,
   closeRef,
 }: WindowControlsProps) {
+  const accentColor = useThemeStore((state) => state.accentColor);
+
+  const accentWithAlpha = (alpha: number) => {
+    const sanitized = accentColor.value.replace('#', '');
+    if (sanitized.length !== 6) {
+      return `rgba(0, 255, 102, ${alpha})`;
+    }
+
+    const bigint = Number.parseInt(sanitized, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
   return (
     <div className="flex items-center gap-3 ml-4">
       <div
         ref={minimizeRef}
-        className="titlebar-button-borderless w-5 h-5 flex items-center justify-center text-white/60 hover:text-white transition-colors cursor-pointer"
+        className="titlebar-button-borderless group relative w-6 h-6 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer rounded-md overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${accentWithAlpha(0.18)}, rgba(0, 12, 6, 0.6))`,
+          border: `1px solid ${accentWithAlpha(0.22)}`,
+          boxShadow: `0 6px 16px ${accentWithAlpha(0.18)}`,
+        }}
         title="Minimize"
       >
+        <span
+          className="absolute inset-0 opacity-0 group-hover:opacity-40 transition-opacity"
+          style={{ background: `radial-gradient(circle at 50% 0%, ${accentWithAlpha(0.6)}, transparent 70%)` }}
+        />
         <Icon icon="pixel:minus-solid" className="w-4 h-4" />
       </div>
       <div
         ref={maximizeRef}
-        className="titlebar-button-borderless w-5 h-5 flex items-center justify-center text-white/60 hover:text-white transition-colors cursor-pointer"
+        className="titlebar-button-borderless group relative w-6 h-6 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer rounded-md overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${accentWithAlpha(0.2)}, rgba(0, 12, 6, 0.62))`,
+          border: `1px solid ${accentWithAlpha(0.25)}`,
+          boxShadow: `0 6px 16px ${accentWithAlpha(0.2)}`,
+        }}
         title="Maximize"
       >
+        <span
+          className="absolute inset-0 opacity-0 group-hover:opacity-45 transition-opacity"
+          style={{ background: `radial-gradient(circle at 50% 0%, ${accentWithAlpha(0.6)}, transparent 70%)` }}
+        />
         <Icon icon="pixel:expand-solid" className="w-4 h-4" />
       </div>
       <div
         ref={closeRef}
-        className="titlebar-button-borderless w-5 h-5 flex items-center justify-center text-white/60 hover:text-red-500 transition-colors cursor-pointer"
+        className="titlebar-button-borderless group relative w-6 h-6 flex items-center justify-center text-white/70 hover:text-red-400 transition-colors cursor-pointer rounded-md overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${accentWithAlpha(0.14)}, rgba(30, 4, 4, 0.8))`,
+          border: `1px solid ${accentWithAlpha(0.18)}`,
+          boxShadow: `0 6px 16px ${accentWithAlpha(0.16)}`,
+        }}
         title="Close"
       >
+        <span
+          className="absolute inset-0 opacity-0 group-hover:opacity-45 transition-opacity"
+          style={{ background: `radial-gradient(circle at 50% 0%, rgba(255, 70, 70, 0.5), transparent 70%)` }}
+        />
         <Icon icon="pixel:window-close-solid" className="w-4 h-4" />
       </div>
     </div>
