@@ -28,14 +28,13 @@ You will need the following tools installed:
 
 ### Installation
 
-Clone the repository and install dependencies:
+Clone this repository and install dependencies:
 
 ```bash
-git clone --recurse-submodules https://github.com/NoRiskClient/noriskclient-launcher zickzack-client
+git clone --recurse-submodules https://github.com/enti-i/ZickZackClient.git zickzack-client
 cd zickzack-client
 yarn install
 ```
-
 
 Or run one of the bundled helper scripts to install dependencies and produce a release build in a single step:
 
@@ -58,11 +57,10 @@ Use the `--help`/`-Help` flag to see all capabilities. Highlights include loggin
   yarn dev
   ```
 
-- **Type-check and lint the project**
+- **Build the frontend**
 
   ```bash
-  yarn lint
-  yarn typecheck
+  yarn build
   ```
 
 ### Building Binaries
@@ -87,13 +85,17 @@ You can edit configuration through the Settings tab in the UI or by modifying th
 
 ## Troubleshooting & Support
 
-- **Bug reports & feature requests:** [Open an issue](https://github.com/NoRiskClient/issues/issues/new/choose).
+- **Bug reports & feature requests:** Open an issue in this repository.
 - **Common build errors:** Ensure that the Rust toolchain is installed and up to date (`rustup update`). If you encounter Node version conflicts, consider using `nvm` to switch to Node 18+.
-- **Launcher logs:** Check the Tauri application logs under `%APPDATA%/zickzack-client/logs` on Windows or `~/.local/share/zickzack-client/logs` on Linux.
+- **Launcher logs:** Check the Tauri application logs under the platform-specific ZickZack Client application-data directory.
+
+## Compatibility note
+
+Some internal integration names and network endpoints still refer to NoRiskClient for compatibility with the inherited launcher code. Those functional integrations are intentionally not renamed as part of the branding-only cleanup.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository, create a branch, and submit a pull request describing your changes. When contributing code, run the lint, type check, and build commands listed above to keep the project consistent.
+Contributions are welcome. Please fork the repository, create a branch, and submit a pull request describing your changes. Run the build before submitting changes.
 
 ## License
 
